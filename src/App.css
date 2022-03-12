@@ -5,6 +5,7 @@
 .board-row {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .board-cell {
@@ -22,4 +23,11 @@
 .board-cell.hide {
   background-color: #077187;
   color: red;
+}
+
+.game-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }

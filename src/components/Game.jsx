@@ -12,7 +12,7 @@ export default class Game extends Component {
     const { width, heigth, mines } = this.state;
 
     return (
-      <div>
+      <div className="game-area">
         <div className="board-area">
           <Board
             width={ width }
