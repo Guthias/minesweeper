@@ -7,12 +7,13 @@ export default class Board extends Component {
   }
 
   componentDidMount() {
-    console.log(this.createBoard());
+    this.setState({ board: this.createBoard() });
   }
 
   createBoard = () => {
     let board = this.createEmptyBoard();
     board = this.plantMines(board);
+    board = this.showHints(board);
     return board;
   }
   
@@ -52,80 +53,69 @@ export default class Board extends Component {
     return minedBoard;
   }
 
-  getCellsAround = (board, mineY, mineX) => {
+  showHints = (board) => {
+    const { width, heigth } = this.props;
+    const hintBoard = [...board];
+
+    for (let posY = 0; posY < heigth; posY += 1) {
+      for (let posX = 0; posX < width; posX += 1) {
+        if (board[posX][posY].isMine) {
+          const cellsAround = this.getCellsAround(board, board[posX][posY].y, board[posX][posY].x);
+          cellsAround.forEach(({x, y}) => {
+            hintBoard[y][x].bombsAround += 1;
+          })
+        }
+      }  
+    }
+
+    return hintBoard;
+  }
+
+  getCellsAround = (board, posY, posX) => {
     const { width, heigth } = this.props;
 
+    const cellsAround = [];
     // Top Left
-    if (mineY > 0 && mineX > 0) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY - 1][mineX - 1].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posY > 0 && posX > 0) {
+      cellsAround.push(board[posY - 1][posX - 1]);
     }
 
     // Top Center
-    if (mineY > 0) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY - 1][mineX].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posY > 0) {
+      cellsAround.push(board[posY - 1][posX]);
     }
 
     // Top Right
-    if (mineY > 0 && mineX < width - 1) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY - 1][mineX + 1].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posY > 0 && posX < width - 1) {
+      cellsAround.push(board[posY - 1][posX + 1]);
     }
 
     // Left
-    if (mineX > 0) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY][mineX - 1].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posX > 0) {
+      cellsAround.push(board[posY][posX - 1]);
     }
 
     // Right
-    if (mineX < width - 1) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY][mineX + 1].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posX < width - 1) {
+      cellsAround.push(board[posY][posX + 1]);
     }
 
     // Bottom Left
-    if (mineY < heigth - 1 && mineX > 0) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY + 1][mineX - 1].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posY < heigth - 1 && posX > 0) {
+      cellsAround.push(board[posY + 1][posX - 1]);
     }
 
     // Bottom
-    if (mineY < heigth - 1) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY + 1][mineX].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posY < heigth - 1) {
+      cellsAround.push(board[posY + 1][posX]);
     }
 
     // Bottom Right
-    if (mineY < heigth - 1 && mineX < width - 1) {
-      this.setState((prevState) => {
-        const updateBoard = [...prevState.board];
-        updateBoard[mineY + 1][mineX + 1].bombsAround += 1;
-        return { board: updateBoard }
-      });
+    if (posY < heigth - 1 && posX < width - 1) {  
+      cellsAround.push(board[posY + 1][posX + 1]);
     }
+
+    return cellsAround;
   }
 
   render() {
