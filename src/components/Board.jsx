@@ -132,7 +132,7 @@ export default class Board extends Component {
   render() {
     const { board } = this.state;
     return board.map((boardRow, index) => (
-      <div key={`row-${index}`}>
+      <div className="board-row" key={`row-${index}`}>
         { boardRow.map((cell, rowIndex) =>(
           <Cell key={`row-${index}-${rowIndex}`} {...cell} onClick={ this.cellClick }/>
         ) ) }

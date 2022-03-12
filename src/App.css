@@ -1,3 +1,12 @@
+* {
+  box-sizing: border-box;
+}
+
+.board-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .board-cell {
   background-color: #F1DAC4;
   font-size: 28px;
