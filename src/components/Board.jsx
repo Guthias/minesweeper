@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Cell from './Cell';
 
 export default class Board extends Component {
   state = {
@@ -96,9 +97,11 @@ export default class Board extends Component {
   }
 
   render() {
-
-    return (
-      <div>Board</div>
-    )
+    const { board } = this.state;
+    return board.map((boardRow, index) => (
+      <div key={`row-${index}`}>
+        { boardRow.map((cell, rowIndex) => <Cell key={`row-${index}-${rowIndex}`} {...cell} /> ) }
+      </div>
+    ))
   }
 }
