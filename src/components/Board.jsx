@@ -118,11 +118,24 @@ export default class Board extends Component {
     return cellsAround;
   }
 
+  cellClick = (posX, posY) => {
+    const { board } = this.state;
+    let updatedBoard = [...board];
+
+    updatedBoard[posX][posY].isClicked = true;
+
+    this.setState({
+      board: updatedBoard,
+    })
+  }
+
   render() {
     const { board } = this.state;
     return board.map((boardRow, index) => (
       <div key={`row-${index}`}>
-        { boardRow.map((cell, rowIndex) => <Cell key={`row-${index}-${rowIndex}`} {...cell} /> ) }
+        { boardRow.map((cell, rowIndex) =>(
+          <Cell key={`row-${index}-${rowIndex}`} {...cell} onClick={ this.cellClick }/>
+        ) ) }
       </div>
     ))
   }

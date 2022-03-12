@@ -2,9 +2,12 @@ import React, { Component } from 'react'
 
 export default class Cell extends Component {
   render() {
-    const { isMine, bombsAround } = this.props;
+    const { onClick, y: posY , x: posX, isClicked } = this.props;
     return (
-      isMine ? <button>B</button> : <button>{ bombsAround }</button>
+      <button
+        className={ isClicked ? 'board-cell' : 'board-cell hide'}
+        onClick={ () => onClick(posY, posX)}>
+      </button>
     )
   }
 }
