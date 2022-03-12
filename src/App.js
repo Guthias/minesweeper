@@ -1,11 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
-import Board from './components/Board';
+import Game from './components/Game';
 
 function App() {
   return (
     <div className="App">
-      <Board width={ 8 } heigth={ 8 } mines={ 5 } />
+      <Game />
     </div>
   );
 }
