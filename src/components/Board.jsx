@@ -118,11 +118,28 @@ export default class Board extends Component {
     return cellsAround;
   }
 
-  cellClick = (posX, posY) => {
+  revealEmpty(y, x, board) {
+    const cellsAround = this.getCellsAround(board, y, x)
+    cellsAround.forEach((cell) => {
+      if (!cell.isClicked && (cell.bombsAround === 0 || !cell.isMine)) {
+        board[cell.y][cell.x].isClicked = true;
+        if (cell.bombsAround === 0) {
+          this.revealEmpty(cell.y, cell.x, board);
+        }
+      }
+    });
+    return board;
+  }
+
+  cellClick = (posY, posX) => {
     const { board } = this.state;
     let updatedBoard = [...board];
 
-    updatedBoard[posX][posY].isClicked = true;
+    updatedBoard[posY][posX].isClicked = true;
+
+    if(updatedBoard[posY][posX].bombsAround === 0 && !updatedBoard[posY][posX].isMine) {
+      updatedBoard = this.revealEmpty(posY, posX, updatedBoard);
+    }
 
     this.setState({
       board: updatedBoard,
