@@ -6,7 +6,7 @@ export default class Board extends Component {
   }
 
   componentDidMount() {
-    this.setState({ board: this.createBoard() });
+    this.createBoard();
   }
 
   createBoard = () => {
@@ -28,9 +28,25 @@ export default class Board extends Component {
       newBoard.push(boardRow);
     }
 
-    return newBoard;
+    this.setState({ board: newBoard }, this.plantMines);
   }
   
+  plantMines = () => {
+    const { board } = this.state;
+    const { width, heigth, mines } = this.props;
+    let plantedmines = 0;
+
+    while(plantedmines < Number(mines)) {
+      const mineX = Math.floor(Math.random() * width);
+      const mineY = Math.floor(Math.random() * heigth);
+     
+      if (!board[mineY][mineX].isMine) { 
+        plantedmines += 1;
+        board[mineY][mineX].isMine = true;
+      }
+    }
+  }
+
   render() {
 
     return (
