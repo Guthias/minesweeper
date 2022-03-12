@@ -138,6 +138,10 @@ export default class Board extends Component {
     const { board } = this.state;
     let updatedBoard = [...board];
 
+    if(updatedBoard[posY][posX].isMine) {
+      this.loseGame();
+    }
+
     updatedBoard[posY][posX].isClicked = true;
 
     if(updatedBoard[posY][posX].bombsAround === 0 && !updatedBoard[posY][posX].isMine) {
@@ -147,6 +151,10 @@ export default class Board extends Component {
     this.setState({
       board: updatedBoard,
     })
+  }
+
+  loseGame = () => {
+    alert('Você perdeu');
   }
 
   render() {
