@@ -17,20 +17,22 @@ export default class Board extends Component {
     return board;
   }
   
+  createBoardCell = (posY, posX) => ({
+    posX,
+    posY,
+    isMine: false,
+    isClicked: false,
+    isFlagged: false,
+    bombsAround: 0,
+  });
+
   createEmptyBoard = () => {
     const { width, heigth } = this.props;
     const newBoard = [];
     for(let y = 0; y < heigth; y+= 1) {
       const boardRow = [];
       for(let x = 0; x < width; x+= 1) {
-        boardRow.push(({
-          x,
-          y,
-          isMine: false,
-          isClicked: false,
-          isFlagged: false,
-          bombsAround: 0,
-        }));
+        boardRow.push((this.createBoardCell(y, x)));
       }
       newBoard.push(boardRow);
     }
@@ -57,12 +59,13 @@ export default class Board extends Component {
     const { width, heigth } = this.props;
     const hintBoard = [...board];
 
-    for (let posY = 0; posY < heigth; posY += 1) {
-      for (let posX = 0; posX < width; posX += 1) {
-        if (board[posX][posY].isMine) {
-          const cellsAround = this.getCellsAround(board, board[posX][posY].y, board[posX][posY].x);
-          cellsAround.forEach(({x, y}) => {
-            hintBoard[y][x].bombsAround += 1;
+    for (let y = 0; y < heigth; y += 1) {
+      for (let x = 0; x < width; x += 1) {
+        const cell = board[x][y];
+        if (cell.isMine) {
+          const cellsAround = this.getCellsAround(board, cell.posY, cell.posX);
+          cellsAround.forEach(({posY, posX}) => {
+            hintBoard[posY][posX].bombsAround += 1;
           })
         }
       }  
@@ -118,13 +121,13 @@ export default class Board extends Component {
     return cellsAround;
   }
 
-  revealEmpty(y, x, board) {
-    const cellsAround = this.getCellsAround(board, y, x)
+  revealEmpty(posY, posX, board) {
+    const cellsAround = this.getCellsAround(board, posY, posX)
     cellsAround.forEach((cell) => {
       if (!cell.isClicked && (cell.bombsAround === 0 || !cell.isMine)) {
-        board[cell.y][cell.x].isClicked = true;
+        board[cell.posY][cell.posX].isClicked = true;
         if (cell.bombsAround === 0) {
-          this.revealEmpty(cell.y, cell.x, board);
+          this.revealEmpty(cell.posY, cell.posX, board);
         }
       }
     });

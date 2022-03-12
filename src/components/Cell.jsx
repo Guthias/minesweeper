@@ -4,7 +4,7 @@ import { FaBomb, FaFlag } from 'react-icons/fa';
 export default class Cell extends Component {
   
   hiddenBoardCell = () => {
-    const {onClick, y: posY , x: posX} = this.props; 
+    const {onClick, posY, posX} = this.props; 
     return (
       <button
         className="board-cell hide"
