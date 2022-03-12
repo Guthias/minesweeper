@@ -138,6 +138,8 @@ export default class Board extends Component {
     const { board } = this.state;
     let updatedBoard = [...board];
 
+    if(updatedBoard[posY][posX].isFlagged) return
+
     if(updatedBoard[posY][posX].isMine) {
       this.loseGame();
     }
@@ -153,6 +155,15 @@ export default class Board extends Component {
     })
   }
 
+  addFlag = (event, posY, posX) => {
+    event.preventDefault();
+    const { board } = this.state;
+    const updatedBoard = [...board];
+    const cell = updatedBoard[posY][posX]
+    cell.isFlagged = !cell.isFlagged;
+    this.setState({ board: updatedBoard});
+  }
+
   loseGame = () => {
     alert('Você perdeu');
   }
@@ -162,7 +173,12 @@ export default class Board extends Component {
     return board.map((boardRow, index) => (
       <div className="board-row" key={`row-${index}`}>
         { boardRow.map((cell, rowIndex) =>(
-          <Cell key={`row-${index}-${rowIndex}`} {...cell} onClick={ this.cellClick }/>
+          <Cell
+            key={`row-${index}-${rowIndex}`}
+            {...cell}
+            onClick={ this.cellClick }
+            addFlag={ this.addFlag }
+            />
         ) ) }
       </div>
     ))

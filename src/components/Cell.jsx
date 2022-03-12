@@ -4,12 +4,15 @@ import { FaBomb, FaFlag } from 'react-icons/fa';
 export default class Cell extends Component {
   
   hiddenBoardCell = () => {
-    const {onClick, posY, posX} = this.props; 
+    const {onClick, addFlag, posY, posX, isFlagged} = this.props; 
     return (
       <button
         className="board-cell hide"
-        onClick={ () => onClick(posY, posX)}
-      />
+        onClick={ () => onClick(posY, posX) }
+        onContextMenu={ (event) => addFlag(event, posY, posX) }
+      >
+        { isFlagged && <FaFlag /> }
+      </button>
     )
   }
 
