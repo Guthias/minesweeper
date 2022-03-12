@@ -44,9 +44,11 @@ export default class Board extends Component {
      
       if (!board[mineY][mineX].isMine) { 
         plantedmines += 1;
-        board[mineY][mineX].isMine = true;
-        console.log(mineY, mineX)
-        this.giveHint(mineY, mineX);
+        this.setState((prevState) => {
+          const updateBoard = [...prevState.board];
+          board[mineY][mineX].isMine = true;
+          return { board: updateBoard }
+        }, () => this.giveHint(mineY, mineX));
       }
     }
   }
